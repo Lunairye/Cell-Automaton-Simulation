@@ -5,9 +5,9 @@
 #include "automaton.h"
 
 int main() {
-	Automaton automaton(10, 10);
-
 	InitWindow(1600, 800, "tuff");
+
+	Automaton automaton(10, 10);
 
 	while (!WindowShouldClose()) {
 		BeginDrawing();

@@ -3,47 +3,16 @@
 #include "raymath.h"
 
 #include "grid.h"
+#include "ui.h"
 
 #include <memory>
 #include <string>
 #include <functional>
 
-struct UIStyle {
 
-};
 
-class UIElement {
-private:
+using DrawCell = std::function<void(Rectangle bounds, const Cell& cell)>;
 
-public:
-	Vector2 position{};
-	Vector2 dimensions{};
-
-	virtual void Update() {}
-	virtual void Draw(const UIStyle& style) = 0;
-	virtual ~UIElement() = default;
-};
-
-class Panel : public UIElement {
-private:
-
-public:
-	std::vector<std::unique_ptr<UIElement>> children;
-
-	void Update() override;
-	void Draw(const UIStyle& style) override;
-};
-
-class Button : public UIElement {
-private:
-
-public:
-	std::string label;
-	std::function<void()> onClick;
-
-	void Update() override;
-	void Draw(const UIStyle& style) override;
-};
 
 class Renderer {
 private:
@@ -57,10 +26,18 @@ public:
 	Vector2 textboxPosition{ 850, 25 };
 	Vector2 textboxDimensions{ 725, 750};
 
+	UIStyle style;
+	Panel uiRoot;
+
+	DrawCell drawCell = [](Rectangle bounds, const Cell& cell) {
+		DrawRectangleRec(bounds, cell.value == 0 ? BLACK : RAYWHITE);
+	};
+
 	Renderer(Grid* grid)
 		:grid(grid)
 	{
 	};
 
+	void Update();
 	void Render();
 };
