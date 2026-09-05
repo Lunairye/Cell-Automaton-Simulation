@@ -21,7 +21,7 @@ FetchContent_MakeAvailable(raylib)
 set(SOURCES
     src/main.cpp
     
- )
+  "src/graphics.cpp")
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
