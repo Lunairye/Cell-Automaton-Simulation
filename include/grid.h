@@ -5,16 +5,15 @@
 #include <vector>
 
 struct Cell {
-	bool activated = false;
+	int value = 0;
 };
 
 class Grid {
 private:
+	std::vector<Cell> cells{};
+public:
 	int rows = 0;
 	int cols = 0;
-	std::vector<Cell> cells{};
-
-public:
 
 	Grid(int rows, int cols)
 		:

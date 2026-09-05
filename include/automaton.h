@@ -1,10 +1,17 @@
 #pragma once
 
 #include "grid.h"
+#include "graphics.h"
 
 class Automaton {
 private:
-	Grid grid;
+	
 public:
+	Grid grid;
+	Renderer renderer;
 
+	Automaton(int rows, int cols)
+		: grid(rows, cols), renderer(&grid)
+	{
+	};
 };
