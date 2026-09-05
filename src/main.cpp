@@ -11,6 +11,7 @@ int main() {
 
 	while (!WindowShouldClose()) {
 		BeginDrawing();
+		automaton.renderer.Update();
 		automaton.renderer.Render();
 		EndDrawing();
 	}

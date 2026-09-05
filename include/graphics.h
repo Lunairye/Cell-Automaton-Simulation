@@ -9,10 +9,19 @@
 #include <string>
 #include <functional>
 
+enum Scene {
+	MAINMENU,
+	SIMULATOR,
+	SETTINGS
+};
 
+void BuildMainMenu();
+
+void BuildSimulator();
+
+void BuildSettings();
 
 using DrawCell = std::function<void(Rectangle bounds, const Cell& cell)>;
-
 
 class Renderer {
 private:
@@ -40,4 +49,6 @@ public:
 
 	void Update();
 	void Render();
+
+	void SwapScene(const Scene& scene);
 };
