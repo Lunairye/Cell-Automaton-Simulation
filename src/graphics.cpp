@@ -1,6 +1,6 @@
 #include "graphics.h"
 
-void BuildMainMenu(Panel& uiRoot, Grid& grid) {
+void BuildMainMenu(Panel& uiRoot, Grid& grid, std::function<void(Scene)> swapScene) {
 	auto playButton = std::make_unique<Button>();
 
 	const float PLAYWIDTH = 100;
@@ -13,6 +13,10 @@ void BuildMainMenu(Panel& uiRoot, Grid& grid) {
 
 	playButton->dimensions = { PLAYWIDTH, PLAYHEIGHT };
 	playButton->label = "auera";
+
+	playButton->onClick = [swapScene]() {
+		swapScene(Scene::SIMULATOR);
+		};
 
 	uiRoot.children.push_back(std::move(playButton));
 }
@@ -58,7 +62,7 @@ void Renderer::SwapScene(const Scene& scene) {
 	{
 	case Scene::MAINMENU:
 		currentScene = Scene::MAINMENU;
-		BuildMainMenu(uiRoot, grid);
+		BuildMainMenu(uiRoot, grid, [this](Scene scene) {this->SwapScene(scene); });
 		break;
 	case Scene::SIMULATOR:
 		currentScene = Scene::SIMULATOR;
