@@ -5,7 +5,10 @@ void Panel::Update() {
 }
 
 void Panel::Draw(const UIStyle& style) {
-	DrawRectangleV(position, dimensions, style.background);
+	if (background.has_value()) {
+		DrawRectangleV(position, dimensions, style.background);
+	}
+	
 	for (auto& child : children) child->Draw(style);
 }
 
@@ -19,5 +22,13 @@ void Button::Update() {
 void Button::Draw(const UIStyle& style) {
 	Rectangle bounds{ position.x, position.y, dimensions.x, dimensions.y };
 	DrawRectangleRec(bounds, style.background);
-	DrawTextEx(style.font, label.c_str(), position, style.fontSize, 1, style.foreground);
+
+	Vector2 textSize = MeasureTextEx(style.font, label.c_str(), style.fontSize, 1);
+
+	Vector2 textPosition = {
+		position.x + (dimensions.x / 2) - (textSize.x / 2),
+		position.y + (dimensions.y / 2) - (textSize.y / 2)
+	};
+
+	DrawTextEx(style.font, label.c_str(), textPosition, style.fontSize, 1, style.foreground);
 }

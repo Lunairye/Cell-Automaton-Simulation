@@ -9,6 +9,8 @@ int main() {
 
 	Automaton automaton(10, 10);
 
+	automaton.renderer.SwapScene(automaton.renderer.currentScene);
+
 	while (!WindowShouldClose()) {
 		BeginDrawing();
 		automaton.renderer.Update();

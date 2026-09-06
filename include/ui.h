@@ -7,6 +7,7 @@
 #include <memory>
 #include <functional>
 #include <string>
+#include <optional>
 
 struct UIStyle {
 	Color background = LIGHTGRAY;
@@ -34,6 +35,7 @@ private:
 
 public:
 	std::vector<std::unique_ptr<UIElement>> children;
+	std::optional<Color> background = std::nullopt;
 
 	void Update() override;
 	void Draw(const UIStyle& style) override;
