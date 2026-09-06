@@ -18,7 +18,7 @@ enum Scene {
 
 void BuildMainMenu(Panel& uiRoot, Grid& grid);
 
-void BuildSimulator(Panel& uiRoot, Grid& grid);
+void BuildSimulator(Panel& uiRoot, Grid& grid, Rectangle& gridRect, Rectangle& textBoxRect);
 
 void BuildSettings(Panel& uiRoot, Grid& grid);
 
@@ -29,12 +29,16 @@ private:
 
 public:
 	Grid& grid;
-	
+
 	Vector2 gridPosition{ 25, 25 };
 	Vector2 gridDimensions{ 750, 750 };
 
-	Vector2 textboxPosition{ 850, 25 };
-	Vector2 textboxDimensions{ 725, 750};
+	Rectangle gridRect = { gridPosition.x, gridPosition.y, gridDimensions.x, gridDimensions.y };
+
+	Vector2 textBoxPosition{ 850, 25 };
+	Vector2 textBoxDimensions{ 725, 750 };
+
+	Rectangle textBoxRect = { textBoxPosition.x, textBoxPosition.y, textBoxDimensions.x, textBoxDimensions.y };
 
 	UIStyle style;
 	Panel uiRoot;

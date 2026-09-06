@@ -21,7 +21,21 @@ void BuildMainMenu(Panel& uiRoot, Grid& grid, std::function<void(Scene)> swapSce
 	uiRoot.children.push_back(std::move(playButton));
 }
 
-void BuildSimulator(Panel& uiRoot, Grid& grid) {}
+void BuildSimulator(Panel& uiRoot, Grid& grid, Rectangle& gridRect, Rectangle& textBoxRect) {
+	auto gridPanel = std::make_unique<Panel>();
+
+	gridPanel->position = { gridRect.x, gridRect.y };
+	gridPanel->dimensions = { gridRect.width, gridRect.height };
+	gridPanel->background = DARKGRAY;
+	uiRoot.children.push_back(std::move(gridPanel));
+
+	auto textBoxPanel = std::make_unique<Panel>();
+
+	textBoxPanel->position = { textBoxRect.x, textBoxRect.y };
+	textBoxPanel->dimensions = { textBoxRect.width, textBoxRect.height };
+	textBoxPanel->background = WHITE;
+	uiRoot.children.push_back(std::move(textBoxPanel));
+}
 
 void BuildSettings(Panel& uiRoot, Grid& grid) {}
 
@@ -29,30 +43,30 @@ void Renderer::Update() {
 	uiRoot.Update();
 }
 
+void RenderGrid(Grid& grid, Rectangle& gridRect, std::function<void(Rectangle bounds, const Cell& cell)> drawCell) {
+	float cellW = gridRect.width / grid.cols;
+	float cellH = gridRect.height / grid.rows;
+
+	for (int row = 0; row < grid.rows; row++) {
+		for (int col = 0; col < grid.cols; col++) {
+			Rectangle bounds{
+				gridRect.x + col * cellW,
+				gridRect.y + row * cellH,
+				cellW, cellH
+			};
+			drawCell(bounds, grid.GetCell(row, col));
+		}
+	}
+}
+
 void Renderer::Render() {
 	ClearBackground(GRAY);
 
-	if (currentScene == Scene::SIMULATOR) {
-		DrawRectangle(gridPosition.x, gridPosition.y, gridDimensions.x, gridDimensions.y, LIGHTGRAY);
-		DrawRectangle(textboxPosition.x, textboxPosition.y, textboxDimensions.x, textboxDimensions.y, LIGHTGRAY);
-
-		float cellW = gridDimensions.x / grid.cols;
-		float cellH = gridDimensions.y / grid.rows;
-
-		for (int row = 0; row < grid.rows; row++) {
-			for (int col = 0; col < grid.cols; col++) {
-				Rectangle bounds{
-					gridPosition.x + col * cellW,
-					gridPosition.y + row * cellH,
-					cellW, cellH
-				};
-				drawCell(bounds, grid.GetCell(row, col));
-			}
-		}
-	}
-	
-
 	uiRoot.Draw(style);
+
+	if (currentScene == Scene::SIMULATOR) {
+		RenderGrid(grid, gridRect, drawCell);
+	}
 }
 
 void Renderer::SwapScene(const Scene& scene) {
@@ -66,7 +80,7 @@ void Renderer::SwapScene(const Scene& scene) {
 		break;
 	case Scene::SIMULATOR:
 		currentScene = Scene::SIMULATOR;
-		BuildSimulator(uiRoot, grid);
+		BuildSimulator(uiRoot, grid, gridRect, textBoxRect);
 		break;
 	case Scene::SETTINGS:
 		currentScene = Scene::SETTINGS;

@@ -21,7 +21,13 @@ void Button::Update() {
 
 void Button::Draw(const UIStyle& style) {
 	Rectangle bounds{ position.x, position.y, dimensions.x, dimensions.y };
-	DrawRectangleRec(bounds, style.background);
+
+	if (CheckCollisionPointRec(GetMousePosition(), bounds)) {
+		DrawRectangleRec(bounds, style.hoverTint);
+	}
+	else {
+		DrawRectangleRec(bounds, style.background);
+	}
 
 	Vector2 textSize = MeasureTextEx(style.font, label.c_str(), style.fontSize, 1);
 
