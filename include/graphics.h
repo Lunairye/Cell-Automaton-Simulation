@@ -5,6 +5,7 @@
 
 #include "grid.h"
 #include "ui.h"
+#include "automaton.h"
 
 #include <memory>
 #include <string>
@@ -29,6 +30,7 @@ private:
 
 public:
 	Grid& grid;
+	Automaton& automaton;
 
 	Vector2 gridPosition{ 25, 25 };
 	Vector2 gridDimensions{ 750, 750 };
@@ -49,8 +51,8 @@ public:
 		DrawRectangleRec(bounds, cell.value == 0 ? BLACK : RAYWHITE);
 	};
 
-	Renderer(Grid& grid)
-		:grid(grid)
+	Renderer(Grid& grid, Automaton& automaton)
+		:grid(grid), automaton(automaton)
 	{
 		uiRoot.position = { 0, 0 };
 		uiRoot.dimensions = { static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()) };

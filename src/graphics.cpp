@@ -21,7 +21,7 @@ void BuildMainMenu(Panel& uiRoot, Grid& grid, std::function<void(Scene)> swapSce
 	uiRoot.children.push_back(std::move(playButton));
 }
 
-void BuildSimulator(Panel& uiRoot, Grid& grid, Rectangle& gridRect, Rectangle& textBoxRect) {
+void BuildSimulator(Panel& uiRoot, Grid& grid, Rectangle& gridRect, Rectangle& textBoxRect, std::function<void()> stepForward) {
 	auto gridPanel = std::make_unique<Panel>();
 
 	gridPanel->position = { gridRect.x, gridRect.y };
@@ -35,6 +35,17 @@ void BuildSimulator(Panel& uiRoot, Grid& grid, Rectangle& gridRect, Rectangle& t
 	textBoxPanel->dimensions = { textBoxRect.width, textBoxRect.height };
 	textBoxPanel->background = WHITE;
 	uiRoot.children.push_back(std::move(textBoxPanel));
+
+	auto forwardSimulationStep = std::make_unique<Button>();
+
+	forwardSimulationStep->position = { textBoxRect.x + 50, textBoxRect.y + 50 };
+	forwardSimulationStep->dimensions = { 100,100 };
+	forwardSimulationStep->label = "Next Step";
+
+	forwardSimulationStep->onClick = [stepForward] {
+		stepForward();
+		};
+	uiRoot.children.push_back(std::move(forwardSimulationStep));
 }
 
 void BuildSettings(Panel& uiRoot, Grid& grid) {}
@@ -54,7 +65,7 @@ void RenderGrid(Grid& grid, Rectangle& gridRect, std::function<void(Rectangle bo
 				gridRect.y + row * cellH,
 				cellW, cellH
 			};
-			drawCell(bounds, grid.GetCell(row, col));
+			drawCell(bounds, grid.GetCellFromCells(row, col));
 		}
 	}
 }
@@ -80,7 +91,7 @@ void Renderer::SwapScene(const Scene& scene) {
 		break;
 	case Scene::SIMULATOR:
 		currentScene = Scene::SIMULATOR;
-		BuildSimulator(uiRoot, grid, gridRect, textBoxRect);
+		BuildSimulator(uiRoot, grid, gridRect, textBoxRect, [this]() {this->automaton.Update(); });
 		break;
 	case Scene::SETTINGS:
 		currentScene = Scene::SETTINGS;
