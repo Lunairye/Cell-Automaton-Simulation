@@ -5,8 +5,9 @@
 #include "application.h"
 
 int main() {
-	InitWindow(1600, 800, "tuff");
+	InitWindow(1600, 800, "Simple Cellular Automaton Simulator");
 
+	// The initialiser of application decides the number of rows and columns that are present in the simulation
 	Application application(10, 10);
 
 	application.renderer.SwapScene(application.renderer.currentScene);
